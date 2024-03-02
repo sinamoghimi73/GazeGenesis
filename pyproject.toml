@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "GazeGenesis"
+version = "0.0.1"
+authors = [{ name = "Sina Moghimi", email = "sinamoghimi73@gmail.com" }]
+description = "A pckage including Computer Vision Pytorch projects."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: macOs :: Linux",
+]
+dependencies = [
+    'torch',
+    'torchvision',
+    'torchaudio',
+    'PyYAML',
+    'rich',
+    'numpy',
+]
+
+[project.urls]
+Homepage = "https://github.com/sinamoghimi73/GazeGenesis"
+Issues = "https://github.com/sinamoghimi73/GazeGenesis/issues"
