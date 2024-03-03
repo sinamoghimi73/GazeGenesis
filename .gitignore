@@ -73,7 +73,7 @@ docs/_build/
 
 # Folders
 data/
-
+DataSet/
 # PyBuilder
 .pybuilder/
 target/
