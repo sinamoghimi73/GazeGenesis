@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 from GazeGenesis.ComputerVision.MNIST.MultiLayerPerceptron.user import User
 
 if __name__ == "__main__":
