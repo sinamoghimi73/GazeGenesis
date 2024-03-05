@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "GazeGenesis"
 version = "0.0.2"
 authors = [{ name = "Sina Moghimi", email = "sinamoghimi73@gmail.com" }]
-description = "A pckage including Computer Vision Pytorch projects."
+description = "A package including Computer Vision Pytorch projects."
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
