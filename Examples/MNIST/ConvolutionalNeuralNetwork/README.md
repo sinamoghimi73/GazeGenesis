@@ -41,3 +41,5 @@ EPOCH: 2/2, LOSS: 0.2462, TRAIN_ACC: 0.9424, VAL_ACC: 0.9389
 [EVALUATE] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 TEST_ACC: 0.9442
 ```
+
+Thanks to Aladdin Persson.
