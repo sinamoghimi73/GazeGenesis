@@ -10,11 +10,11 @@ class CustomTransformer:
         self.transform = transforms.Compose([
             # transforms.ToPILImage(),
             # transforms.RandomCrop((18,18)),
-            transforms.RandomGrayscale(p = 0.2),
-            transforms.Resize((28,28)),
-            transforms.RandomRotation(degrees = 30),
-            transforms.ColorJitter(brightness = 0.5),
-            transforms.RandomHorizontalFlip(p = 0.1),
+            # transforms.RandomGrayscale(p = 0.2),
+            # transforms.Resize((28,28)),
+            # transforms.RandomRotation(degrees = 30),
+            # transforms.ColorJitter(brightness = 0.5),
+            # transforms.RandomHorizontalFlip(p = 0.1),
             transforms.ToTensor(),
             # transforms.Normalize(mean = [0.1], std = [1.0]), # the array size here is variable with channel count. For mean=0 and std=1, the data remains unchanged and not normalized. We should find those values first manually.
         ])
