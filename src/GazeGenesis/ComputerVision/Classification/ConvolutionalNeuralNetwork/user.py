@@ -46,8 +46,8 @@ class User:
                     # Update weights (gradient descent)
                     self.optimizer.step()
 
-                train_accuracy = self.evaluate(self.dataset.train_loader, 'train')
-                valid_accuracy = self.evaluate(self.dataset.valid_loader, 'validation')
+                train_accuracy = self.evaluate(self.dataset.train_loader, 'evaluate: train')
+                valid_accuracy = self.evaluate(self.dataset.valid_loader, 'evaluate: validation')
 
                 print(f"EPOCH: {epoch+1:0{digits}d}/{epochs}, LOSS: {torch.tensor(ls).mean():.4f}, TRAIN_ACC: {train_accuracy:.4f}, VAL_ACC: {valid_accuracy:.4f}")
         else:
@@ -60,7 +60,7 @@ class User:
             with torch.no_grad():
                 correct_predictions = total_samples = 0
 
-                for batch_idx, (inputs, targets) in enumerate(track(loader, description=f"[EVALUATE]")):
+                for batch_idx, (inputs, targets) in enumerate(track(loader, description=f"[{name.upper()}]")):
 
                     # Send to device
                     inputs = inputs.to(device = self.device)
@@ -81,7 +81,7 @@ class User:
             raise Exception("Dataset is None.")
 
     def test(self):
-        test_accuracy = self.evaluate(self.dataset.test_loader, 'validation')
+        test_accuracy = self.evaluate(self.dataset.test_loader, 'test')
         print(f"TEST_ACC: {test_accuracy:.4f}")
 
     def save(self):
