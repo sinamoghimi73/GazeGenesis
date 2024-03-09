@@ -13,3 +13,4 @@ if __name__ == "__main__":
     user = User(in_channels = 3, num_classes = 10, learning_rate = 1e-3, mode = 11, loader=loader)
 
     user.train(epochs = 2)
+    user.test()
