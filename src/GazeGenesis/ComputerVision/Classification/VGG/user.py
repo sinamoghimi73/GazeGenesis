@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from GazeGenesis.Utility.device import get_device_name
-from GazeGenesis.ComputerVision.Datasets.ImageNet import LOADER
+from GazeGenesis.ComputerVision.Datasets.CIFAR100 import LOADER
 from GazeGenesis.ComputerVision.Classification.VGG.model import VGGNet
 
 from rich.progress import track
