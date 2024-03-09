@@ -21,6 +21,7 @@ dependencies = [
     'PyYAML',
     'rich',
     'numpy',
+    'scipy',
 ]
 
 [project.urls]
