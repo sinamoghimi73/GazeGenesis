@@ -23,7 +23,9 @@ class LOADER:
     def __init__(self, validation_ratio = 0.3, train_batch_size = 64, test_batch_size = 64):
         if not (validation_ratio < 1 and validation_ratio >= 0):
             raise RuntimeError('Validation ratio should be >= 0 and < 1.')
-
+        
+        print("Dataset: MNIST")
+        self.dimension = (28,28)
         self.custom_transformer = CustomTransformer()
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
