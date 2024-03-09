@@ -18,7 +18,8 @@ class User:
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr = learning_rate)
-
+        if loader is None: 
+            raise ValueError("You should pass a 'loader' to the user.")
         self.dataset = loader
 
     def train(self, epochs = 10):
