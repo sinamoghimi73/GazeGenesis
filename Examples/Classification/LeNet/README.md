@@ -13,7 +13,7 @@ if __name__ == "__main__":
 ```
 **Parameters**
 ```python
-in_channels = 1
+in_channels = 3
 num_classes = 10
 learning_rate = 0.001
 train_batch_size = 64
@@ -24,16 +24,17 @@ test_batch_size = 64
 USER: LeNet
 DEVICE: mps
 MODEL: LeNet
+Dataset: CIFAR10
 
-[TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:05
+[TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:06
 [EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:02
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-EPOCH: 1/2, LOSS: 0.4558, TRAIN_ACC: 0.9490, VAL_ACC: 0.9489
+[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
+EPOCH: 1/2, LOSS: 1.8517, TRAIN_ACC: 0.3905, VAL_ACC: 0.3909
 
 [TRAIN] 2/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:05
 [EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:02
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-EPOCH: 2/2, LOSS: 0.1274, TRAIN_ACC: 0.9726, VAL_ACC: 0.9696
+[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
+EPOCH: 2/2, LOSS: 1.5652, TRAIN_ACC: 0.4457, VAL_ACC: 0.4323
 ```
 
 **Test**

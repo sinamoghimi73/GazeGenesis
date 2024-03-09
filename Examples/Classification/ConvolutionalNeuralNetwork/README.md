@@ -24,6 +24,7 @@ test_batch_size = 64
 USER: CNN
 DEVICE: mps
 MODEL: CNN
+Dataset: MNIST
 
 [TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:04
 [EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01

@@ -24,6 +24,7 @@ test_batch_size = 64
 USER: MLP
 DEVICE: mps
 MODEL: MLP
+Dataset: MNIST
 
 [TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:03
 [EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
