@@ -11,7 +11,7 @@ class LeNet(nn.Module):
         print("MODEL: LeNet")
 
         self.core_layers = nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=6, kernel_size=(5,5), stride=(1,1), padding=(2,2)),
+            nn.Conv2d(in_channels=in_channels, out_channels=6, kernel_size=(5,5), stride=(1,1), padding=(0,0)), # padding=(2,2) for MNIST
             nn.ReLU(),
             nn.AvgPool2d(kernel_size=(2,2), stride=(2,2)),
             nn.Conv2d(in_channels=6, out_channels=16, kernel_size=(5,5), stride=(1,1), padding=(0,0)),
