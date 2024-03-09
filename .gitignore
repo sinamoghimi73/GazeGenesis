@@ -181,3 +181,7 @@ src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/test_batch
 src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-images-idx3-ubyte
 src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-labels-idx1-ubyte
 src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-images-idx3-ubyte
+*.txt~
+src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/test
+src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/meta
+src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/train
