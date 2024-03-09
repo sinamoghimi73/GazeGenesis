@@ -73,8 +73,7 @@ docs/_build/
 
 # Folders
 data/
-DataSets/
-Datasets/
+
 # PyBuilder
 .pybuilder/
 target/
@@ -163,5 +162,22 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 .DS_Store
+.tar
+.gz
+.tar.gz
+.zip
+.rar
 
-
+src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-labels-idx1-ubyte
+*.meta
+*.html
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_1
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_2
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_3
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_4
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_5
+src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/test_batch
+*.gz
+src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-images-idx3-ubyte
+src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-labels-idx1-ubyte
+src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-images-idx3-ubyte
