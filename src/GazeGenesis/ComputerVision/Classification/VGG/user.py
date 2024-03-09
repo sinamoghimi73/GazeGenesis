@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from GazeGenesis.Utility.device import get_device_name
-from GazeGenesis.ComputerVision.Datasets.CIFAR100 import LOADER
 from GazeGenesis.ComputerVision.Classification.VGG.model import VGGNet
 
 from rich.progress import track
@@ -16,9 +15,8 @@ class User:
         in_channels: int = 1,
         num_classes: int = 10,
         learning_rate: float = 1e-3,
-        train_batch_size: int = 64,
-        test_batch_size: int = 64,
         mode: int = 16,
+        loader = None
     ):
         print(f"USER: VGG-{mode}")
         print(f"DEVICE: {get_device_name()}")
@@ -31,11 +29,7 @@ class User:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
 
-        self.dataset = LOADER(
-            validation_ratio=0.3,
-            train_batch_size=train_batch_size,
-            test_batch_size=test_batch_size,
-        )
+        self.dataset = loader
 
     def train(self, epochs=10):
         if self.dataset is not None:
