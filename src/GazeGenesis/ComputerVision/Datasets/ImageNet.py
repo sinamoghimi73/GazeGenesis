@@ -20,11 +20,12 @@ class LOADER:
             self.custom_transformer = transforms.ToTensor()
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
+        os.system(f"wget https://image-net.org/data/ILSVRC/2012/ILSVRC2012_devkit_t12.tar.gz --no-check-certificate -P {current_directory}/ImageNet")
         os.system(f"wget https://image-net.org/data/ILSVRC/2012/ILSVRC2012_img_train.tar --no-check-certificate -P {current_directory}/ImageNet")
         os.system(f"wget https://image-net.org/data/ILSVRC/2012/ILSVRC2012_img_val.tar --no-check-certificate -P {current_directory}/ImageNet")
 
-        self.train_dataset = datasets.ImageNet(root = current_directory, split = "train", transform = self.custom_transformer, download = False)
-        self.validation_dataset = datasets.ImageNet(root = current_directory, split = "val", transform = self.custom_transformer, download = False)
+        self.train_dataset = datasets.ImageNet(root = current_directory+"/ImageNet", split = "train", transform = self.custom_transformer, download = False)
+        self.validation_dataset = datasets.ImageNet(root = current_directory+"/ImageNet", split = "val", transform = self.custom_transformer, download = False)
         
         self.train_loader = DataLoader(dataset = self.train_dataset, batch_size = train_batch_size, shuffle = True)
         self.valid_loader = DataLoader(dataset = self.validation_dataset, batch_size = test_batch_size, shuffle = True)
