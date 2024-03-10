@@ -185,3 +185,16 @@ src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-images-idx3-ubyte
 src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/test
 src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/meta
 src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/train
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_1
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_2
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_3
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_4
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/data_batch_5
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR10/cifar-10-batches-py/test_batch
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/meta
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/test
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/CIFAR100/cifar-100-python/train
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-labels-idx1-ubyte
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-images-idx3-ubyte
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-labels-idx1-ubyte
+GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-images-idx3-ubyte
