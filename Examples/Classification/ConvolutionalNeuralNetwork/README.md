@@ -3,10 +3,17 @@
 **Script**
 ```python
 
-from GazeGenesis.ComputerVision.MNIST.ConvolutionalNeuralNetwork.user import User
+from GazeGenesis.ComputerVision.Classification.ConvolutionalNeuralNetwork.user import User
+import torchvision.transforms as transforms
+from GazeGenesis.ComputerVision.Datasets.MNIST import LOADER
 
 if __name__ == "__main__":
-    user = User(in_channels = 1, num_classes = 10, learning_rate = 1e-3, train_batch_size = 64, test_batch_size = 64)
+    transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+    loader = LOADER(validation_ratio=0.3, train_batch_size = 64, test_batch_size = 64, transform = transform)
+
+    user = User(in_channels = 1, num_classes = 10, learning_rate = 1e-3, loader=loader)
 
     user.train(epochs = 2)
     user.test()
@@ -18,23 +25,24 @@ num_classes = 10
 learning_rate = 0.001
 train_batch_size = 64
 test_batch_size = 64
+loader = <THE DATASET OF YOUR CHOICE WITH APPROPRIATE TRANSFORM>
 ```
 **Train**
 ```zsh
-USER: CNN
-DEVICE: mps
-MODEL: CNN
 Dataset: MNIST
+USER: CNN
+DEVICE: cuda
+MODEL: CNN
 
-[TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:04
-[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-EPOCH: 1/2, LOSS: 0.5414, TRAIN_ACC: 0.9317, VAL_ACC: 0.9312
+[TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:06
+[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:05
+[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
+EPOCH: 1/2, LOSS: 0.5848, TRAIN_ACC: 0.9257, VAL_ACC: 0.9186
 
-[TRAIN] 2/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:04
-[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-EPOCH: 2/2, LOSS: 0.2010, TRAIN_ACC: 0.9511, VAL_ACC: 0.9499
+[TRAIN] 2/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:06
+[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:04
+[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:02
+EPOCH: 2/2, LOSS: 0.2045, TRAIN_ACC: 0.9451, VAL_ACC: 0.9403
 ```
 
 **Test**
