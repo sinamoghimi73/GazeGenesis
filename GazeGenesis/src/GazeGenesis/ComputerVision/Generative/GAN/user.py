@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from GazeGenesis.Utility.device import get_device_name
 from GazeGenesis.ComputerVision.Generative.GAN.model import Discriminator, Generator
+import torchvision
 from torch.utils.tensorboard import SummaryWriter
 
 from rich.progress import track
@@ -69,8 +70,8 @@ class User:
                     # Train the generator -> min log(1-D(G(noise))) <-> leads to saturating gradients
                     # instead we will have -> max log(D(G(noise)))
 
-                    # output = self.discriminator(fake).view(-1)
-                    output = discriminator_on_fake
+                    output = self.discriminator(fake).view(-1)
+                    # output = discriminator_on_fake
                     loss_generator = self.criterion(output, torch.ones_like(output))
 
                     self.generator_optimizer.zero_grad()
@@ -85,17 +86,22 @@ class User:
                                 # fake = self.generator(self.fixed_noise).reshape(-1, real.shape[1:])
                                 fake = self.generator(self.fixed_noise).reshape(-1, 1, 28, 28)
                                 data = real.reshape(-1,1,28,28)
-                                img_grid_fake = torchvison.utils.make_grid(fake, normalize=True)
-                                img_grid_real = torchvison.utils.make_grid(data, normalize=True)
+                                img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
+                                img_grid_real = torchvision.utils.make_grid(data, normalize=True)
                                 self.writer_fake.add_image("Fake Images", img_grid_fake, global_step = self.step)
                                 self.writer_real.add_image("Real Images", img_grid_real, global_step = self.step)
                                 self.step += 1
+                                self.writer_fake.flush()
+                                self.writer_real.flush()
 
 
                 # train_accuracy = self.evaluate(self.dataset.train_loader, 'evaluate: train')
                 # valid_accuracy = self.evaluate(self.dataset.valid_loader, 'evaluate: validation')
 
                 # print(f"EPOCH: {epoch+1:0{digits}d}/{epochs}, LOSS: {torch.tensor(ls).mean():.4f}, TRAIN_ACC: {train_accuracy:.4f}, VAL_ACC: {valid_accuracy:.4f}")
+        if self.summary_writer_address:
+            self.writer_fake.close()
+            self.writer_real.close()
         else:
             raise Exception("Dataset is None.")
 
