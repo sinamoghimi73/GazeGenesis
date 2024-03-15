@@ -200,3 +200,5 @@ GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-labels-idx1-u
 GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-images-idx3-ubyte
 *.1
 Examples/Generative/GAN/runs/GAN/fake/events.out.tfevents.1710535962.valinor.2324.0
+Examples/Generative/GAN/runs/GAN/fake/events.out.tfevents.1710536744.valinor.3034.0
+*.0

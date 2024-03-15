@@ -22,6 +22,7 @@ dependencies = [
     'rich',
     'numpy',
     'scipy',
+    'tensorboard'
 ]
 
 [project.urls]
