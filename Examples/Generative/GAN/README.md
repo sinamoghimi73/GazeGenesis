@@ -3,52 +3,71 @@
 **Script**
 ```python
 
-from GazeGenesis.ComputerVision.Classification.ConvolutionalNeuralNetwork.user import User
+from GazeGenesis.ComputerVision.Generative.GAN.user import User
 import torchvision.transforms as transforms
 from GazeGenesis.ComputerVision.Datasets.MNIST import LOADER
+import math, os
 
 if __name__ == "__main__":
     transform = transforms.Compose([
             transforms.ToTensor(),
+            transforms.Normalize((0.1307),(0.3081))
         ])
-    loader = LOADER(validation_ratio=0.3, train_batch_size = 64, test_batch_size = 64, transform = transform)
+    loader = LOADER(validation_ratio=0.3, train_batch_size = 16, test_batch_size = 64, transform = transform)
 
-    user = User(in_channels = 1, num_classes = 10, learning_rate = 1e-3, loader=loader)
+    current_adress = os.path.dirname(__file__)
+    user = User(input_dim = math.prod(loader.dimension), noise_dim = 64, learning_rate = 3e-4, loader=loader, summary_writer_address = current_adress + "/runs/GAN/")
 
-    user.train(epochs = 2)
-    user.test()
+    user.train(epochs = 10)
 ```
 **Parameters**
 ```python
-in_channels = 1
-num_classes = 10
-learning_rate = 0.001
+input_dim = 784
+noise_dim = 64
+learning_rate = 0.0003
 train_batch_size = 64
 test_batch_size = 64
 loader = <THE DATASET OF YOUR CHOICE WITH APPROPRIATE TRANSFORM>
+summary_writer_address = current_adress + "/runs/GAN/"
 ```
 **Train**
 ```zsh
 Dataset: MNIST
-USER: CNN
-DEVICE: cuda
-MODEL: CNN
+USER: GAN
+DEVICE: mps
+MODEL: Discriminator
+MODEL: Generator
 
-[TRAIN] 1/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:06
-[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:05
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
-EPOCH: 1/2, LOSS: 0.5848, TRAIN_ACC: 0.9257, VAL_ACC: 0.9186
+EPOCH: 01/10, D_LOSS: 0.6659, G_LOSS: 0.6969
+[TRAIN] 01/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
 
-[TRAIN] 2/2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:06
-[EVALUATE: TRAIN] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:04
-[EVALUATE: VALIDATION] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:02
-EPOCH: 2/2, LOSS: 0.2045, TRAIN_ACC: 0.9451, VAL_ACC: 0.9403
+EPOCH: 02/10, D_LOSS: 0.0754, G_LOSS: 2.8331
+[TRAIN] 02/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
+
+EPOCH: 03/10, D_LOSS: 0.0219, G_LOSS: 3.8983
+[TRAIN] 03/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:20
+
+EPOCH: 04/10, D_LOSS: 0.0461, G_LOSS: 4.7629
+[TRAIN] 04/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
+
+EPOCH: 05/10, D_LOSS: 0.0180, G_LOSS: 4.8466
+[TRAIN] 05/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
+
+EPOCH: 06/10, D_LOSS: 0.0044, G_LOSS: 5.8503
+[TRAIN] 06/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:20
+
+EPOCH: 07/10, D_LOSS: 0.0016, G_LOSS: 6.8584
+[TRAIN] 07/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
+
+EPOCH: 08/10, D_LOSS: 0.0067, G_LOSS: 5.7062
+[TRAIN] 08/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:20
+
+EPOCH: 09/10, D_LOSS: 0.0250, G_LOSS: 4.2842
+[TRAIN] 09/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:20
+
+EPOCH: 10/10, D_LOSS: 0.0093, G_LOSS: 7.5974
+[TRAIN] 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
 ```
 
-**Test**
-```zsh
-[TEST] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-TEST_ACC: 0.9557
-```
 
 Thanks to Aladdin Persson.
