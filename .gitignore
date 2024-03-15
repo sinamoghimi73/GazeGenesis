@@ -198,3 +198,5 @@ GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-labels-idx1-
 GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/train-images-idx3-ubyte
 GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-labels-idx1-ubyte
 GazeGenesis/src/GazeGenesis/ComputerVision/Datasets/MNIST/raw/t10k-images-idx3-ubyte
+*.1
+Examples/Generative/GAN/runs/GAN/fake/events.out.tfevents.1710535962.valinor.2324.0

@@ -10,6 +10,8 @@ class LOADER:
         if not (validation_ratio < 1 and validation_ratio >= 0):
             raise RuntimeError('Validation ratio should be >= 0 and < 1.')
         
+        self.train_batch_size = train_batch_size
+        
         print("Dataset: MNIST")
         self.dimension = (28,28)
         if transform is not None:
