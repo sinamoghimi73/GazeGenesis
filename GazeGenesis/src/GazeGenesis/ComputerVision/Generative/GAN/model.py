@@ -30,7 +30,7 @@ class Generator(nn.Module):
         self.layers = nn.Sequential(
             nn.Linear(noise_dim, 256),
             nn.LeakyReLU(0.1),
-            nn.Linear(128, output_dim),
+            nn.Linear(256, output_dim),
             nn.Softsign()
         )
 
