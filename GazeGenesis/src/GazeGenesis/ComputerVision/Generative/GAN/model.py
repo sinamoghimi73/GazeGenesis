@@ -31,7 +31,7 @@ class Generator(nn.Module):
             nn.Linear(noise_dim, 256),
             nn.LeakyReLU(0.1),
             nn.Linear(256, output_dim),
-            nn.Softsign()
+            nn.Tanh()
         )
 
     def forward(self, x):
