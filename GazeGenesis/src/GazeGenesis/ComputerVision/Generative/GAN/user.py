@@ -53,7 +53,7 @@ class User:
 
                     # Train the discriminator -> max log(D(real)) + log(1 - D(G(noise)))
                     noise = torch.randn(batch_size, self.noise_dim).to(self.device)
-                    fake = self.generator(noise)
+                    fake = self.generator(noise*0.5)
 
                     discriminator_on_real = self.discriminator(real).view(-1)
                     loss_discriminator_on_real = self.criterion(discriminator_on_real, torch.ones_like(discriminator_on_real))
@@ -71,7 +71,6 @@ class User:
                     # instead we will have -> max log(D(G(noise)))
 
                     output = self.discriminator(fake).view(-1)
-                    # output = discriminator_on_fake
                     loss_generator = self.criterion(output, torch.ones_like(output))
 
                     self.generator_optimizer.zero_grad()
@@ -83,11 +82,10 @@ class User:
                             print(f"EPOCH: {epoch+1:0{digits}d}/{epochs}, D_LOSS: {total_loss_discriminator:.4f}, G_LOSS: {loss_generator:.4f}")
 
                             with torch.no_grad():
-                                # fake = self.generator(self.fixed_noise).reshape(-1, real.shape[1:])
-                                fake = self.generator(self.fixed_noise).reshape(-1, 1, 28, 28)
-                                data = real.reshape(-1,1,28,28)
-                                img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
-                                img_grid_real = torchvision.utils.make_grid(data, normalize=True)
+                                fake = self.generator(self.fixed_noise*0.5).reshape(-1, 1, 28, 28)
+                                data = real.reshape(-1, 1, 28,28)
+                                img_grid_fake = torchvision.utils.make_grid(fake.detach(), normalize=True)
+                                img_grid_real = torchvision.utils.make_grid(data.detach(), normalize=True)
                                 self.writer_fake.add_image("Fake Images", img_grid_fake, global_step = self.step)
                                 self.writer_real.add_image("Real Images", img_grid_real, global_step = self.step)
                                 self.step += 1
