@@ -4,26 +4,26 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from GazeGenesis.Utility.device import get_device_name
-from GazeGenesis.ComputerVision.Generative.GAN.model import Discriminator, Generator
+from GazeGenesis.ComputerVision.Generative.DCGAN.model import Discriminator, Generator
 import torchvision
 from torch.utils.tensorboard import SummaryWriter
 
 from rich.progress import track
 
 class User:
-    def __init__(self, input_dim = 784, noise_dim = 64, learning_rate = 3e-4, loader = None, summary_writer_address = None):
-        print("USER: GAN")
+    def __init__(self, in_channels = 784, noise_dim = 64, features = 8, learning_rate = 3e-4, loader = None, summary_writer_address = None):
+        print("USER: DCGAN")
         print(f"DEVICE: {get_device_name()}")
 
         self.device = torch.device(get_device_name())
-        self.discriminator = Discriminator(input_dim = input_dim).to(self.device)
-        self.generator = Generator(noise_dim = noise_dim, output_dim = input_dim).to(self.device)
-        self.fixed_noise = torch.randn((loader.train_batch_size, noise_dim)).to(self.device)
+        self.discriminator = Discriminator(in_channels = in_channels, features_d = features).to(self.device)
+        self.generator = Generator(noise_dim = noise_dim, out_channels = in_channels, features_g = features).to(self.device)
+        self.fixed_noise = torch.randn((loader.train_batch_size, noise_dim, 1, 1)).to(self.device)
         self.noise_dim = noise_dim
 
         self.criterion = nn.BCELoss()
-        self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(), lr = learning_rate)
-        self.generator_optimizer = optim.Adam(self.generator.parameters(), lr = learning_rate)
+        self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(), lr = learning_rate, betas = (0.5, 0.999))
+        self.generator_optimizer = optim.Adam(self.generator.parameters(), lr = learning_rate, betas = (0.5, 0.999))
 
         # Tensorboard settings 
         self.summary_writer_address = summary_writer_address
@@ -37,6 +37,9 @@ class User:
         self.dataset = loader
 
     def train(self, epochs = 10):
+        self.discriminator.train()
+        self.generator.train()
+        
         if self.dataset is not None:
             digits = int(torch.log10(torch.tensor(epochs))) + 1
             for epoch in range(epochs):
@@ -47,12 +50,11 @@ class User:
                     # Send to device
                     real = real.to(device = self.device)
 
-                    # Get the inputs to correct shape
-                    real = real.reshape(real.shape[0], -1) # -1 flattens the other dimensions together
+                    # Get the batch size
                     batch_size = real.shape[0]
 
                     # Train the discriminator -> max log(D(real)) + log(1 - D(G(noise)))
-                    noise = torch.randn(batch_size, self.noise_dim).to(self.device)
+                    noise = torch.randn(batch_size, self.noise_dim, 1, 1).to(self.device)
                     fake = self.generator(noise*0.5)
 
                     discriminator_on_real = self.discriminator(real).view(-1)
