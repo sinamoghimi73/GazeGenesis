@@ -25,21 +25,21 @@ class User:
         self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(), lr = learning_rate, betas = (0.5, 0.999))
         self.generator_optimizer = optim.Adam(self.generator.parameters(), lr = learning_rate, betas = (0.5, 0.999))
 
-        # Tensorboard settings 
+        # Tensorboard settings
         self.summary_writer_address = summary_writer_address
         if self.summary_writer_address:
             self.writer_fake = SummaryWriter(self.summary_writer_address + "fake")
             self.writer_real = SummaryWriter(self.summary_writer_address + "real")
             self.step = 0
 
-        if loader is None: 
+        if loader is None:
             raise ValueError("You should pass a 'loader' to the user.")
         self.dataset = loader
 
     def train(self, epochs = 10):
         self.discriminator.train()
         self.generator.train()
-        
+
         if self.dataset is not None:
             digits = int(torch.log10(torch.tensor(epochs))) + 1
             for epoch in range(epochs):
@@ -57,25 +57,25 @@ class User:
                     noise = torch.randn(batch_size, self.noise_dim, 1, 1).to(self.device)
                     fake = self.generator(noise*0.5)
 
-                    discriminator_on_real = self.discriminator(real).view(-1)
+                    discriminator_on_real = self.discriminator(real).reshape(-1)
                     loss_discriminator_on_real = self.criterion(discriminator_on_real, torch.ones_like(discriminator_on_real))
 
-                    discriminator_on_fake = self.discriminator(fake).view(-1)
+                    discriminator_on_fake = self.discriminator(fake).reshape(-1)
                     loss_discriminator_on_fake = self.criterion(discriminator_on_fake, torch.zeros_like(discriminator_on_fake))
 
                     total_loss_discriminator = (loss_discriminator_on_real + loss_discriminator_on_fake) / 2
 
-                    self.discriminator_optimizer.zero_grad()
+                    self.discriminator.zero_grad()
                     total_loss_discriminator.backward(retain_graph = True) # we need the retain_graph = True to keep the gradients for the later use in Generator
                     self.discriminator_optimizer.step()
 
                     # Train the generator -> min log(1-D(G(noise))) <-> leads to saturating gradients
                     # instead we will have -> max log(D(G(noise)))
 
-                    output = self.discriminator(fake).view(-1)
+                    output = self.discriminator(fake).reshape(-1)
                     loss_generator = self.criterion(output, torch.ones_like(output))
 
-                    self.generator_optimizer.zero_grad()
+                    self.generator.zero_grad()
                     loss_generator.backward()
                     self.generator_optimizer.step()
 
@@ -84,10 +84,9 @@ class User:
                             print(f"EPOCH: {epoch+1:0{digits}d}/{epochs}, D_LOSS: {total_loss_discriminator:.4f}, G_LOSS: {loss_generator:.4f}")
 
                             with torch.no_grad():
-                                fake = self.generator(self.fixed_noise*0.5).reshape(-1, 1, 28, 28)
-                                data = real.reshape(-1, 1, 28,28)
+                                fake = self.generator(self.fixed_noise)
                                 img_grid_fake = torchvision.utils.make_grid(fake.detach(), normalize=True)
-                                img_grid_real = torchvision.utils.make_grid(data.detach(), normalize=True)
+                                img_grid_real = torchvision.utils.make_grid(real.detach(), normalize=True)
                                 self.writer_fake.add_image("Fake Images", img_grid_fake, global_step = self.step)
                                 self.writer_real.add_image("Real Images", img_grid_real, global_step = self.step)
                                 self.step += 1
@@ -141,6 +140,3 @@ class User:
 
     def save(self):
         pass
-
-
-
