@@ -1,36 +1,45 @@
 # Deep Convolutional Generative Adversarial Network
 
 **Script**
+
 ```python
 
-from GazeGenesis.ComputerVision.Generative.GAN.user import User
+from GazeGenesis.ComputerVision.Generative.DCGAN.user import User
 import torchvision.transforms as transforms
 from GazeGenesis.ComputerVision.Datasets.MNIST import LOADER
 import math, os
 
 if __name__ == "__main__":
+    img_channels = 1
     transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.1307),(0.3081))
+            transforms.Resize(64),
+            transforms.Normalize(
+                [0.5 for _ in range(img_channels)], [0.5 for _ in range(img_channels)]
+                )
         ])
-    loader = LOADER(validation_ratio=0.3, train_batch_size = 16, test_batch_size = 64, transform = transform)
+    loader = LOADER(validation_ratio=0.01, train_batch_size = 32, test_batch_size = 64, transform = transform)
 
     current_adress = os.path.dirname(__file__)
-    user = User(input_dim = math.prod(loader.dimension), noise_dim = 64, learning_rate = 3e-4, loader=loader, summary_writer_address = current_adress + "/runs/GAN/")
+    user = User(in_channels = img_channels, noise_dim = 100, features = 64, learning_rate = 2e-4, loader=loader, summary_writer_address = current_adress + "/runs/DCGAN/")
 
-    user.train(epochs = 10)
+    user.train(epochs = 5)
 ```
+
 **Parameters**
+
 ```python
-input_dim = 784
-noise_dim = 64
-learning_rate = 0.0003
-train_batch_size = 64
+in_channels = 1
+noise_dim = 100
+learning_rate = 0.0002
+train_batch_size = 32
 test_batch_size = 64
 loader = <THE DATASET OF YOUR CHOICE WITH APPROPRIATE TRANSFORM>
-summary_writer_address = current_adress + "/runs/GAN/"
+summary_writer_address = current_adress + "/runs/DCGAN/"
 ```
+
 **Train**
+
 ```zsh
 Dataset: MNIST
 USER: GAN
@@ -68,6 +77,5 @@ EPOCH: 09/10, D_LOSS: 0.0250, G_LOSS: 4.2842
 EPOCH: 10/10, D_LOSS: 0.0093, G_LOSS: 7.5974
 [TRAIN] 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:21
 ```
-
 
 Thanks to Aladdin Persson.
