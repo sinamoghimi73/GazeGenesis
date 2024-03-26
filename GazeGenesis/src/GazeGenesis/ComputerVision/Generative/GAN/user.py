@@ -25,14 +25,14 @@ class User:
         self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(), lr = learning_rate)
         self.generator_optimizer = optim.Adam(self.generator.parameters(), lr = learning_rate)
 
-        # Tensorboard settings 
+        # Tensorboard settings
         self.summary_writer_address = summary_writer_address
         if self.summary_writer_address:
             self.writer_fake = SummaryWriter(self.summary_writer_address + "fake")
             self.writer_real = SummaryWriter(self.summary_writer_address + "real")
             self.step = 0
 
-        if loader is None: 
+        if loader is None:
             raise ValueError("You should pass a 'loader' to the user.")
         self.dataset = loader
 
@@ -103,42 +103,5 @@ class User:
         else:
             raise Exception("Dataset is None.")
 
-    def evaluate(self, loader, name):
-        if self.dataset is not None:
-            self.model.eval() # This is evaluation mode
-
-            with torch.no_grad():
-                correct_predictions = total_samples = 0
-
-                for batch_idx, (inputs, targets) in enumerate(track(loader, description=f"[{name.upper()}]")):
-
-                    # Send to device
-                    inputs = inputs.to(device = self.device)
-                    targets = targets.to(device = self.device)
-
-                    # Get the inputs to correct shape
-                    inputs = inputs.reshape(inputs.shape[0], -1) # -1 flattens the other dimensions together
-
-                    # Forward path
-                    predictions = self.model(inputs)
-                    _, predicted = torch.max(predictions, 1)
-
-                    correct_predictions +=  (predicted == targets).sum().item()
-                    total_samples += len(targets)
-
-                accuracy = correct_predictions / total_samples
-
-            self.model.train()
-            return accuracy
-        else:
-            raise Exception("Dataset is None.")
-
-    def test(self):
-        test_accuracy = self.evaluate(self.dataset.test_loader, 'test')
-        print(f"TEST_ACC: {test_accuracy:.4f}")
-
     def save(self):
         pass
-
-
-

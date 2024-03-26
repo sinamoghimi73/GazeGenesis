@@ -104,39 +104,5 @@ class User:
         else:
             raise Exception("Dataset is None.")
 
-    def evaluate(self, loader, name):
-        if self.dataset is not None:
-            self.model.eval() # This is evaluation mode
-
-            with torch.no_grad():
-                correct_predictions = total_samples = 0
-
-                for batch_idx, (inputs, targets) in enumerate(track(loader, description=f"[{name.upper()}]")):
-
-                    # Send to device
-                    inputs = inputs.to(device = self.device)
-                    targets = targets.to(device = self.device)
-
-                    # Get the inputs to correct shape
-                    inputs = inputs.reshape(inputs.shape[0], -1) # -1 flattens the other dimensions together
-
-                    # Forward path
-                    predictions = self.model(inputs)
-                    _, predicted = torch.max(predictions, 1)
-
-                    correct_predictions +=  (predicted == targets).sum().item()
-                    total_samples += len(targets)
-
-                accuracy = correct_predictions / total_samples
-
-            self.model.train()
-            return accuracy
-        else:
-            raise Exception("Dataset is None.")
-
-    def test(self):
-        test_accuracy = self.evaluate(self.dataset.test_loader, 'test')
-        print(f"TEST_ACC: {test_accuracy:.4f}")
-
     def save(self):
         pass
