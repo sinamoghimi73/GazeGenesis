@@ -23,7 +23,7 @@ if __name__ == "__main__":
     user.train(epochs = 2)
     user.test()
 ```
-**Parameters**
+<!-- **Parameters**
 ```python
 in_channels = 3
 num_classes = 10
@@ -57,4 +57,4 @@ EPOCH: 2/2, LOSS: 1.4066, TRAIN_ACC: 0.5220, VAL_ACC: 0.4929
 TEST_ACC: 0.5094
 ```
 
-Thanks to Aladdin Persson.
+Thanks to Aladdin Persson. -->
