@@ -64,7 +64,6 @@ class User:
                     inputs = inputs.to(device=self.device)
                     targets = targets.to(device=self.device)
 
-                    
                     # Forward path
                     predictions = self.model(inputs)
                     loss = self.criterion(predictions, targets)
