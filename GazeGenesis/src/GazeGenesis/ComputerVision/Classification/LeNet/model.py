@@ -24,7 +24,7 @@ class LeNet(nn.Module):
         self.tail_layers = nn.Sequential(
             nn.Linear(120, 84),
             nn.ReLU(),
-            nn.Linear(84, 10)
+            nn.Linear(84, num_classes)
         )
 
 
