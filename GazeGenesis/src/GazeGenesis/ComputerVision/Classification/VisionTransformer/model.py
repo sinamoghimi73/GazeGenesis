@@ -4,7 +4,7 @@ from GazeGenesis.Utility.device import get_device_name
 
 class PatchEmbeddings(nn.Module):
     def __init__(self, image_size = 224, patch_size = 16, in_channels = 3, embed_dim = 768):
-        super().__init__()
+        super(PatchEmbeddings, self).__init__()
         self.image_size = image_size
         self.patch_size = patch_size
 
@@ -21,7 +21,7 @@ class PatchEmbeddings(nn.Module):
 
 class Attention(nn.Module):
     def __init__(self, dim, n_heads, qkv_bias = True, attn_p = 0.1, proj_p = 0.1):
-        super().__init__()
+        super(Attention, self).__init__()
         self.n_heads = n_heads
         self.dim = dim
         self.head_dim = dim // n_heads
@@ -60,7 +60,7 @@ class Attention(nn.Module):
 
 class MLP(nn.Module):
     def __init__(self, in_features, hidden_features, out_features, p = 0.):
-        super().__init__()
+        super(MLP, self).__init__()
         self.layers = nn.Sequential(
             nn.Linear(in_features, hidden_features),
             nn.GELU(),
@@ -74,7 +74,7 @@ class MLP(nn.Module):
     
 class Block(nn.Module):
     def __init__(self, dim, n_heads, mlp_ratio = 4.0, qkv_bias = True, p = 0., attn_p = 0.):
-        super().__init__()
+        super(Block, self).__init__()
         self.norm1 = nn.LayerNorm(dim, eps=1e-6)
         self.attn = Attention(
             dim = dim, n_heads = n_heads, qkv_bias = qkv_bias, attn_p = attn_p, proj_p = p
@@ -95,7 +95,7 @@ class VisionTransformer(nn.Module):
     def __init__(self, 
                  img_size = 384, patch_size = 16, in_channels = 3, n_classes = 10, embed_dim = 768, depth = 12, n_heads = 12, mlp_ratio = 4., qkv_bias = True, p = 0., attn_p = 0.
                  ):
-        super().__init__()
+        super(VisionTransformer, self).__init__()
         self.patch_embed = PatchEmbeddings(image_size = img_size, patch_size = patch_size, in_channels = in_channels, embed_dim = embed_dim)
 
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
