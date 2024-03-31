@@ -8,7 +8,7 @@ GazeGenesis: This repository is a playground for innovative computer vision proj
 python3 -m pip install GazeGenesis
 ```
 
-<code style="color : orange">To receive the up-to-date package:</code>
+<font style="color : orange">To receive the up-to-date package:</font>
 ```zsh
 
 git clone https://github.com/sinamoghimi73/GazeGenesis.git
