@@ -70,7 +70,7 @@ class User:
                     ls.append(loss)
 
                     # Backward prop
-                    self.model.zero_grad()
+                    self.optimizer.zero_grad()
                     loss.backward()
 
                     # Update weights (gradient descent)
