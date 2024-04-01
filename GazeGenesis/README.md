@@ -3,6 +3,8 @@ GazeGenesis: This repository is a playground for innovative computer vision proj
 
 **The project is intended to leverage the cutting-edge Apple Silicon Architectures using MLX and PyTorch!**
 
+[PyPI Link](https://pypi.org/project/GazeGenesis/)
+
 **Install**
 ```zsh
 python3 -m pip install GazeGenesis
