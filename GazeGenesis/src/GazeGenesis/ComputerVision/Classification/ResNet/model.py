@@ -5,47 +5,48 @@ import torch.nn as nn
 from GazeGenesis.Utility.device import get_device_name
 import copy
 
+
+def create_fold(feature_list, kernel_list, fold_size, first_stride):
+    return [(kernel_list[j], feature_list[j], first_stride if (i == 0 and j == 0) else 1) for i in range(fold_size) for j in range(len(feature_list))]
+
+
+
 resnet_folds = {
     # layer_count: kernel_size, num_features, stride
 
-    18: [   [(3, 64, 1)]*4,
-            [(3, 128, (1 if i != 0 else 2)) for i in range(2*2)],
-            [(3, 256, (1 if i != 0 else 2)) for i in range(2*2)],
-            [(3, 512, (1 if i != 0 else 2)) for i in range(2*2)],
-           ],
+    18: [   create_fold(kernel_list = [3, 3], feature_list = [64, 64], fold_size = 2, first_stride = 1),
+            create_fold(kernel_list = [3, 3], feature_list = [128, 128], fold_size = 2, first_stride = 2),
+            create_fold(kernel_list = [3, 3], feature_list = [256, 256], fold_size = 2, first_stride = 2),
+            create_fold(kernel_list = [3, 3], feature_list = [512, 512], fold_size = 2, first_stride = 2),
+        ],
 
-    34: [   [(3, 64, 1), (3, 64, 1)] * 3,
-            [(3, 128, (1 if i != 0 else 2)) for i in range(4 * 2)],
-            [(3, 256, (1 if i != 0 else 2)) for i in range(6 * 2)],
-            [(3, 512, (1 if i != 0 else 2)) for i in range(3 * 2)],
-           ],
+    34: [   
+            create_fold(kernel_list = [3, 3], feature_list = [64, 64], fold_size = 3, first_stride = 1),
+            create_fold(kernel_list = [3, 3], feature_list = [128, 128], fold_size = 4, first_stride = 2),
+            create_fold(kernel_list = [3, 3], feature_list = [256, 256], fold_size = 6, first_stride = 2),
+            create_fold(kernel_list = [3, 3], feature_list = [512, 512], fold_size = 3, first_stride = 2),
+        ],
 
-    50: [   [(1, 64, 1), (3, 64, 1), (1, 256, 1)] * 3,
-            [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 4,
-            [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 6,
-            [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
-           ],
+    50: [   create_fold(kernel_list = [1, 3, 1], feature_list = [64, 64, 256], fold_size = 3, first_stride = 1),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [128, 128, 512], fold_size = 4, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [256, 256, 1024], fold_size = 6, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [512, 512, 2048], fold_size = 3, first_stride = 2),
+        ],
            
-    101: [ [(1, 64, 1, 0), (3, 64, 1, 1), (1, 256, 1, 0)] * 3,
-           [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 4,
-           [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 23,
-           [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
-           ],
+    101: [ 
+            create_fold(kernel_list = [1, 3, 1], feature_list = [64, 64, 256], fold_size = 3, first_stride = 1),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [128, 128, 512], fold_size = 4, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [256, 256, 1024], fold_size = 23, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [512, 512, 2048], fold_size = 3, first_stride = 2),
+        ],
 
-    150: [ [(1, 64, 1), (3, 64, 1), (1, 256, 1)] * 3,
-           [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 8,
-           [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 36,
-           [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
-           ],
+    152: [ 
+            create_fold(kernel_list = [1, 3, 1], feature_list = [64, 64, 256], fold_size = 3, first_stride = 1),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [128, 128, 512], fold_size = 8, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [256, 256, 1024], fold_size = 36, first_stride = 2),
+            create_fold(kernel_list = [1, 3, 1], feature_list = [512, 512, 2048], fold_size = 3, first_stride = 2),
+        ],
 }
-
-# resnet_expansion = {
-#     18: 1,
-#     34: 1,
-#     50: 4,
-#     101: 4,
-#     152: 4
-# }
 
 
 
@@ -89,11 +90,8 @@ class ResidualBlock(nn.Module):
 
 
     def forward(self, x):
-        print("level: ", self.conv_level)
         identity = self.identity(x)
-        print("identity", identity.shape)
         x = self.core_layers(x)
-        print("core", x.shape)
         x += identity
         return self.tail_layers(x)
 
@@ -139,12 +137,7 @@ class ResNet(nn.Module):
         return x
 
 if __name__ == "__main__":
-    # t = ResidualBlock(in_channels = 3, mode = 50, conv_level = 0)
     x = torch.randn(1, 3, 224, 224)
-
-    # print(x.shape)
-    # print(t(x).shape)
-
-    t = ResNet(in_channels = 3, mode = 34)
+    t = ResNet(in_channels = 3, num_classes = 10, mode = 150)
     print(x.shape)
     print(t(x).shape)
