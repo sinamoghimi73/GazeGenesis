@@ -8,25 +8,25 @@ import copy
 resnet_folds = {
     # layer_count: kernel_size, num_features, stride
 
-    50: [  [(1, 64, 1), (3, 64, 1), (1, 256, 1)] * 3,
-           [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 4,
-           [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 6,
-           [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
+    18: [   [(3, 64, 1)]*4,
+            [(3, 128, (1 if i != 0 else 2)) for i in range(2*2)],
+            [(3, 256, (1 if i != 0 else 2)) for i in range(2*2)],
+            [(3, 512, (1 if i != 0 else 2)) for i in range(2*2)],
            ],
 
-    18: [  [(3, 64, 1), (3, 64, 1)] * 2,
-           [(3, 128, 2), (3, 128, 2)] * 2,
-           [(3, 256, 2), (3, 256, 2)] * 2,
-           [(3, 512, 2), (3, 512, 2)] * 2,
+    34: [   [(3, 64, 1), (3, 64, 1)] * 3,
+            [(3, 128, (1 if i != 0 else 2)) for i in range(4 * 2)],
+            [(3, 256, (1 if i != 0 else 2)) for i in range(6 * 2)],
+            [(3, 512, (1 if i != 0 else 2)) for i in range(3 * 2)],
            ],
 
-    34: [  [(3, 64, 1), (3, 64, 1)] * 3,
-           [(3, 128, 2), (3, 128, 2)] * 4,
-           [(3, 256, 2), (3, 256, 2)] * 6,
-           [(3, 512, 2), (3, 512, 2)] * 3,
+    50: [   [(1, 64, 1), (3, 64, 1), (1, 256, 1)] * 3,
+            [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 4,
+            [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 6,
+            [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
            ],
-
-    101: [ [(1, 64, 1), (3, 64, 1), (1, 256, 1)] * 3,
+           
+    101: [ [(1, 64, 1, 0), (3, 64, 1, 1), (1, 256, 1, 0)] * 3,
            [(1, 128, 2), (3, 128, 2), (1, 512, 2)] * 4,
            [(1, 256, 2), (3, 256, 2), (1, 1024, 2)] * 23,
            [(1, 512, 2), (3, 512, 2), (1, 2048, 2)] * 3,
@@ -50,9 +50,9 @@ resnet_folds = {
 
 
 
-class Block(nn.Module):
+class WeightLayer(nn.Module):
     def __init__(self, in_channels, out_channels, stride = 1, kernel_size = 1, padding = 0):
-        super(Block, self).__init__()
+        super(WeightLayer, self).__init__()
 
         self.core_layers = nn.Sequential(
             nn.Conv2d(in_channels = in_channels, out_channels = out_channels, stride = stride, kernel_size = kernel_size, padding = padding),
@@ -73,12 +73,14 @@ class ResidualBlock(nn.Module):
         in_features = copy.copy(in_channels)
         for kernel_size, out_features, stride in self.resnet_architecture[self.conv_level]:
                 padding = 1 if kernel_size == 3 else 0
-                layers.append(Block(in_channels = in_features, out_channels = out_features, stride = stride, kernel_size = kernel_size, padding = padding))
+                layers.append(WeightLayer(in_channels = in_features, out_channels = out_features, stride = stride, kernel_size = kernel_size, padding = padding))
                 layers.append(nn.ReLU())
                 in_features = out_features
         layers.pop()                
 
-        self.identity = Block(in_channels = in_channels, out_channels = in_features, stride = stride, kernel_size = 1, padding = 0)
+        if conv_level:
+            stride = 2
+        self.identity = WeightLayer(in_channels = in_channels, out_channels = out_features, stride = stride, kernel_size = 1, padding = 0)
         self.out_channels = in_features
 
         self.core_layers = nn.Sequential(*layers)
@@ -87,10 +89,11 @@ class ResidualBlock(nn.Module):
 
 
     def forward(self, x):
+        print("level: ", self.conv_level)
         identity = self.identity(x)
         print("identity", identity.shape)
         x = self.core_layers(x)
-        print("x", x.shape)
+        print("core", x.shape)
         x += identity
         return self.tail_layers(x)
 
@@ -142,6 +145,6 @@ if __name__ == "__main__":
     # print(x.shape)
     # print(t(x).shape)
 
-    t = ResNet(in_channels = 3, mode = 18)
+    t = ResNet(in_channels = 3, mode = 34)
     print(x.shape)
     print(t(x).shape)
