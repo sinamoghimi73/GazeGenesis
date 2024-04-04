@@ -25,7 +25,7 @@ jobs:
     - name: Fetch clone data
       run: |
         python - << EOF
-        import requests
+        import requests, re
         from datetime import datetime, timedelta
 
         def get_clone_counts(repo_owner, repo_name, since_date):
@@ -46,16 +46,17 @@ jobs:
 
         repo_owner = "sinamoghimi73"
         repo_name = "GazeGenesis"
-        since_date = (datetime.utcnow() - timedelta(days=30)).isoformat()  # Change the number of days as needed
+        since_date = (datetime.utcnow() - timedelta(days=3650)).isoformat()  # Change the number of days as needed
         clone_data = get_clone_counts(repo_owner, repo_name, since_date)
         if clone_data:
             accumulative_sum = calculate_accumulative_sum(clone_data)
             print(f"Accumulative sum of clones: {accumulative_sum}")
-            badge_url = f"https://img.shields.io/badge/Clones-{accumulative_sum}-blue"
-            with open("badge_url.txt", "w") as f:
-                f.write(badge_url)
-        EOF
+            # badge_url = f"https://img.shields.io/badge/Clones-{accumulative_sum}-blue"
 
-    - name: Update README with badge
-      run: |
-        sed -i "s|badge_placeholder|$(cat badge_url.txt)|" README.md
+            pattern = r'\[!\[Clones\]\(https://img.shields.io/badge/Clones-\d+-blue\)\]\(https://github\.com/sinamoghimi73/GazeGenesis\)'
+            with open("README.md", "r") as f:
+                readme_content = f.read()
+            readme_content = re.sub(pattern, f'[![Clones](https://img.shields.io/badge/Clones-{accumulative_sum}-blue)](https://github.com/sinamoghimi73/GazeGenesis)', readme_content)
+            with open("README.md", "w") as f:
+                f.write(readme_content)
+        EOF

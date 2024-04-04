@@ -1,6 +1,6 @@
 # GazeGenesis
 
-[![Clones](badge_placeholder)](https://github.com/sinamoghimi73/GazeGenesis)
+[![Clones](https://img.shields.io/badge/Clones-0-blue)](https://github.com/sinamoghimi73/GazeGenesis)
 
 GazeGenesis: This repository is a playground for innovative computer vision projects, exploring cutting-edge algorithms, and pushing the boundaries of visual perception.🔭📸 #ComputerVision #AI #Innovation"
 
