@@ -1,8 +1,13 @@
 name: Fetch Clone Data
 
+# on:
+#   schedule:
+#     - cron: '0 0 * * *' # Run every day at midnight UTC
+
 on:
-  schedule:
-    - cron: '0 0 * * *' # Run every day at midnight UTC
+  push:
+    branches:
+      - main
 
 jobs:
   update_readme:
