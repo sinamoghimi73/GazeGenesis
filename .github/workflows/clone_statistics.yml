@@ -58,4 +58,4 @@ jobs:
 
     - name: Update README with badge
       run: |
-        sed -i "s|\[!\[Clones\]\]([^)]*)|[![Clones]($(cat badge_url.txt))]|" README.md
+        sed -i "s|badge_placeholder|$(cat badge_url.txt)|" README.md
