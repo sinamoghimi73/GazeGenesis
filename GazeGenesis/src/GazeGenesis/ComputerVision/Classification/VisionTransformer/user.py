@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import torch
-import torch.nn as nn
-import torch.optim as optim
+from torch import nn, optim
 from GazeGenesis.Utility.device import get_device_name
 from GazeGenesis.ComputerVision.Classification.VisionTransformer.model import VisionTransformer
 
@@ -51,7 +50,6 @@ class User:
         if self.dataset is not None:
             digits = int(torch.log10(torch.tensor(epochs))) + 1
             for epoch in range(epochs):
-                print()
                 ls = []
                 for batch_idx, (inputs, targets) in enumerate(
                     track(
@@ -84,7 +82,7 @@ class User:
                 )
 
                 print(
-                    f"EPOCH: {epoch+1:0{digits}d}/{epochs}, LOSS: {torch.tensor(ls).mean():.4f}, TRAIN_ACC: {train_accuracy:.4f}, VAL_ACC: {valid_accuracy:.4f}"
+                    f"EPOCH: {epoch+1:0{digits}d}/{epochs}, LOSS: {torch.tensor(ls).mean():.4f}, TRAIN_ACC: {train_accuracy:.4f}, VAL_ACC: {valid_accuracy:.4f}\n"
                 )
         else:
             raise Exception("Dataset is None.")
