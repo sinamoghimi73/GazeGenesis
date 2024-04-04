@@ -9,7 +9,7 @@ class PatchEmbeddings(nn.Module):
         self.patch_size = patch_size
 
         self.num_patches = int(image_size // patch_size) ** 2
-        self.patchifier = nn.Conv2d(in_channels, embed_dim, kernel_size=patch_size, stride=patch_size)
+        self.patchifier = nn.Conv2d(in_channels=in_channels, out_channels=embed_dim, kernel_size=patch_size, stride=patch_size)
 
     def forward(self, x):
         # (batch_size, in_channels, image_size, image_size) -> (batch_size, num_patches, embed_dim)
@@ -32,6 +32,8 @@ class Attention(nn.Module):
         self.proj = nn.Linear(dim, dim)
         self.proj_drop = nn.Dropout(proj_p)
 
+        self.softmax = nn.Softmax(dim=-1)
+
 
     def forward(self, x):
         n_samples, n_tokens, dim = x.shape
@@ -46,7 +48,7 @@ class Attention(nn.Module):
         q, k, v = qkv[0], qkv[1], qkv[2]
         k_t = k.transpose(-2, -1)  # (n_samples, n_heads, head_dim, n_patches + 1)
         attention_scores = torch.matmul(q, k_t) * self.scale # (n_samples, n_heads, n_patches + 1, n_patches + 1)
-        attention_probs = attention_scores.softmax(dim=-1)  # (n_samples, n_heads, n_patches + 1, n_patches + 1)
+        attention_probs = self.softmax(attention_scores)  # (n_samples, n_heads, n_patches + 1, n_patches + 1)
         attention_probs = self.attn_drop(attention_probs)
 
         weighted_avg = torch.matmul(attention_probs, v)  # (n_samples, n_heads, n_patches +1, head_dim)
@@ -87,8 +89,8 @@ class Block(nn.Module):
         )
 
     def forward(self, x):
-        x += x + self.attn(self.norm1(x))
-        x += self.mlp(self.norm2(x))
+        x = x + self.attn(self.norm1(x))
+        x = x + self.mlp(self.norm2(x))
         return x
     
 class VisionTransformer(nn.Module):
@@ -96,6 +98,7 @@ class VisionTransformer(nn.Module):
                  img_size = 384, patch_size = 16, in_channels = 3, n_classes = 10, embed_dim = 768, depth = 12, n_heads = 12, mlp_ratio = 4., qkv_bias = True, p = 0., attn_p = 0.
                  ):
         super(VisionTransformer, self).__init__()
+        print(f"Model: ViT-{depth}")
         self.patch_embed = PatchEmbeddings(image_size = img_size, patch_size = patch_size, in_channels = in_channels, embed_dim = embed_dim)
 
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
@@ -110,11 +113,11 @@ class VisionTransformer(nn.Module):
     def forward(self, x):
         batch_size = x.shape[0]
         x = self.patch_embed(x)
-
+        
         cls_token = self.cls_token.expand(batch_size, -1, -1) # (n_samples, 1, embed_dim)
         x = torch.cat((cls_token, x), dim = 1) # (n_samples, 1 + n_patches, embed_dim)
 
-        x += self.pos_embed # (n_samples, 1 + n_patches, embed_dim)
+        x = x + self.pos_embed # (n_samples, 1 + n_patches, embed_dim)
         x = self.pos_drop(x)
 
         for block in self.blocks:
@@ -136,7 +139,7 @@ if __name__ == "__main__":
         patch_size= 4,
         in_channels = 3,
         n_classes = 10,
-        embed_dim = 8,
+        embed_dim = 48,
         depth = 1,
         n_heads = 4,
         mlp_ratio= 4.,
