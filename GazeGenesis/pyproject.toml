@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "GazeGenesis"
-version = "0.0.3"
+version = "0.0.4"
 authors = [{ name = "Sina Moghimi", email = "sinamoghimi73@gmail.com" }]
 description = "A package including Computer Vision Pytorch projects."
 readme = "README.md"
