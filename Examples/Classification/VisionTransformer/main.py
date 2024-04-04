@@ -6,6 +6,7 @@ from GazeGenesis.ComputerVision.Datasets.MNIST import LOADER
 if __name__ == "__main__":
     transform = transforms.Compose([
             transforms.ToTensor(),
+            transforms.Normalize((0.1307),(0.3081)),
         ])
     loader = LOADER(validation_ratio=0.3, train_batch_size = 64, test_batch_size = 64, transform=transform)
 
