@@ -8,9 +8,6 @@ jobs:
   update_readme:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
     - name: Traffic to Badge
       uses: yi-Xu-0100/traffic-to-badge@v1.4.0
             
