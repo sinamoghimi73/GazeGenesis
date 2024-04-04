@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      
+
 jobs:
   update_readme:
     runs-on: ubuntu-latest
@@ -51,13 +51,10 @@ jobs:
         if clone_data:
             accumulative_sum = calculate_accumulative_sum(clone_data)
             print(f"Accumulative sum of clones: {accumulative_sum}")
-            with open("accumulative_clone_count.txt", "w") as f:
-                f.write(str(accumulative_sum))
+            badge_url = f"https://img.shields.io/badge/Clones-{accumulative_sum}-blue"
+            with open("badge_url.txt", "w") as f:
+                f.write(badge_url)
         EOF
-
-    - name: Generate badge URL
-      id: badge_url
-      run: echo "::set-output name=badge_url::https://img.shields.io/badge/Clones-$(cat accumulative_clone_count.txt)-blue"
 
     - name: Update README with badge
       run: |
