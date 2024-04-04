@@ -1,4 +1,4 @@
-name: Fetch Clone Data
+name: Update Clone Badge
 
 # on:
 #   schedule:
@@ -8,11 +8,57 @@ on:
   push:
     branches:
       - main
-
+      
 jobs:
   update_readme:
     runs-on: ubuntu-latest
     steps:
-    - name: Traffic to Badge
-      uses: yi-Xu-0100/traffic-to-badge@v1.4.0
-            
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Fetch clone data
+      run: |
+        python - << EOF
+        import requests
+        from datetime import datetime, timedelta
+
+        def get_clone_counts(repo_owner, repo_name, since_date):
+            url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/traffic/clones"
+            params = {'per': 'day', 'since': since_date}
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Failed to fetch clone data. Status code: {response.status_code}")
+                return None
+
+        def calculate_accumulative_sum(clone_data):
+            accumulative_sum = 0
+            for day_data in clone_data['clones']:
+                accumulative_sum += day_data['count']
+            return accumulative_sum
+
+        repo_owner = "your_username"
+        repo_name = "your_repository_name"
+        since_date = (datetime.utcnow() - timedelta(days=30)).isoformat()  # Change the number of days as needed
+        clone_data = get_clone_counts(repo_owner, repo_name, since_date)
+        if clone_data:
+            accumulative_sum = calculate_accumulative_sum(clone_data)
+            print(f"Accumulative sum of clones: {accumulative_sum}")
+        EOF
+
+    - name: Generate badge URL
+      id: badge_url
+      run: echo "::set-output name=badge_url::https://img.shields.io/badge/Clones-$(cat accumulative_clone_count.txt)-blue"
+
+    - name: Update README with badge
+      run: |
+        sed -i "s|badge_placeholder|$(cat badge_url.txt)|" README.md
