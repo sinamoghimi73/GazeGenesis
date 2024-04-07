@@ -56,4 +56,4 @@ EPOCH: 2/2, LOSS: 1.8785, TRAIN_ACC: 0.3399, VAL_ACC: 0.3372
 TEST_ACC: 0.3419
 ```
 
-Thanks to mildlyoverfitted.
+Thanks to [mildlyoverfitted](https://github.com/jankrepl).

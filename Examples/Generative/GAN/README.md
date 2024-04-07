@@ -70,4 +70,4 @@ EPOCH: 10/10, D_LOSS: 0.0093, G_LOSS: 7.5974
 ```
 
 
-Thanks to Aladdin Persson.
+Thanks to [Aladdin Persson](https://github.com/aladdinpersson).
