@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 from GazeGenesis.Utility.device import get_device_name
-from itertools import chain
+import numpy as np
 
 conv_architecture = [
     # kernel_size, out_channel, stride, padding, max_pool
@@ -40,8 +40,7 @@ class ConvBlock(nn.Module):
         self.core_layers = nn.Sequential(
             nn.Conv2d(in_channels=in_channels, out_channels=out_channel, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
             nn.BatchNorm2d(out_channel),
-            # nn.LeakyReLU(0.1),
-            nn.SiLU() # the original paper is using ReLU
+            nn.LeakyReLU(0.1),
         )
 
         if max_pool:
@@ -71,10 +70,12 @@ class YOLOv1(nn.Module):
         self.core_layers = nn.Sequential(
             nn.Flatten(),
             nn.Linear(1024 * 7 * 7, 4096),
-            nn.Dropout(),
+            nn.Dropout(0.0),
             nn.LeakyReLU(0.1),
             nn.Linear(4096, 7 * 7 * (num_classes + num_boxes * 5))
         )
+
+        self.params = sum(p.numel() for p in self.head_layers.parameters() if p.requires_grad) + sum(p.numel() for p in self.core_layers.parameters() if p.requires_grad)
 
     def forward(self, x):
         x = self.head_layers(x)
@@ -89,6 +90,8 @@ class YOLOv1(nn.Module):
 
 #     x = torch.randn(1, 3, 448, 448)
 
-#     z = y(x).shape
+#     print(y.params)
 
-#     print(z)
+#     # z = y(x).shape
+
+#     # print(z, y.params)
